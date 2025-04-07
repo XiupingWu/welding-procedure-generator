@@ -1,103 +1,112 @@
-import Image from "next/image";
+"use client"
+
+import "./styles.css"
+import { useState } from "react";
+import ProcedureDisplay from '@components/ProcedureDisplay';
+import { WeldingProcedureInterface } from '@/app/utils/types';
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [weldingData, setWeldingData] = useState<WeldingProcedureInterface | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const handleButtonClick = async () => {
+    const formData = new FormData(document.getElementById('feature-input-form') as HTMLFormElement);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    const data = {
+      材质: formData.get('material'),
+      厚度: formData.get('thickness'),
+      坡口角度: formData.get('bevelAngle'),
+      钝边: formData.get('bluntEdge'),
+      间隙: formData.get('gap'),
+      直径: formData.get('diameter'),
+      增透剂: formData.get('penetrant'),
+    };
+    console.log(JSON.stringify(data, null, 2));
+    
+    // 调用API
+    setIsLoading(true);
+    try {
+      // 模拟API调用
+      const response = await new Promise<{data: WeldingProcedureInterface}>((resolve) => {
+        setTimeout(() => {
+          resolve({
+            data: {
+              焊接角度: 35 + Math.random() * 5,
+              峰值电流: 180 + Math.random() * 20
+            }
+          });
+        }, 1000);
+      });
+      
+      setWeldingData(response.data);
+    } catch (error) {
+      console.error("获取焊接参数失败", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="page-container">
+      {/* Feature param input area */}
+      <div>
+        <form id="feature-input-form">
+          <div>
+            <div className="input-container">
+              <label className="input-label">材质</label>
+              <select name="material" className="select-input">
+                <option value="碳钢">碳钢</option>
+                <option value="不锈钢">不锈钢</option>
+              </select>
+            </div>
+          </div>
+          <div className="row-container">
+            <div className="input-container">
+              <label className="input-label">厚度</label>
+              <input type='number' step={0.1} defaultValue={0.0} name="thickness" className="text-input" />
+            </div>
+            <div className="input-container">
+              <label className="input-label">坡口角度</label>
+              <input type='number' step={0.1} defaultValue={0.0} name="bevelAngle" className="text-input" />
+            </div>
+          </div>
+          <div className="row-container">
+            <div className="input-container">
+              <label className="input-label">钝边</label>
+              <input type='number' step={0.1} defaultValue={0.0} name="bluntEdge" className="text-input" />
+            </div>
+            <div className="input-container">
+              <label className="input-label">间隙</label>
+              <input type='number' step={0.1} defaultValue={0.0} name="gap" className="text-input" />
+            </div>
+          </div>
+          <div className="row-container">
+            <div className="input-container">
+              <label className="input-label">直径</label>
+              <input type='number' step={0.1} defaultValue={0.0} name="diameter" className="text-input" />
+            </div>
+            <div className="input-container">
+              <label className="input-label">增透剂</label>
+              <select name="penetrant" className="select-input">
+                <option value="是">是</option>
+                <option value="否">否</option>
+              </select>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            onClick={handleButtonClick}
+            className="submit-button"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            生成焊接参数
+          </button>
+        </form>
+      </div>
+
+      <div className="ml-5">
+        <ProcedureDisplay data={weldingData} isLoading={isLoading} />
+      </div>
     </div>
-  );
+  )
 }
