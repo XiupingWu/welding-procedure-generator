@@ -7,6 +7,7 @@ import { useProcedure } from "./store";
 import ProcedureUploader from "./components/ProcedureUploader";
 
 export default function Home() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [formData, setFormData] = useState(null);
   const { fetchPredictProcedure } = useProcedure();
   
