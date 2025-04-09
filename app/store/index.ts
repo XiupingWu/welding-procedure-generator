@@ -1,0 +1,3 @@
+// app/store/index.ts
+export { useProcedure } from './weldingProcedureStore';
+// 导出其他store...

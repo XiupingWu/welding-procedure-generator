@@ -3,55 +3,38 @@
 import "./styles.css"
 import { useState } from "react";
 import ProcedureDisplay from '@components/ProcedureDisplay';
-import { WeldingProcedureInterface } from '@/app/utils/types';
-
+import { useProcedure } from "./store";
+import ProcedureUploader from "./components/ProcedureUploader";
 
 export default function Home() {
-  const [weldingData, setWeldingData] = useState<WeldingProcedureInterface | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState(null);
+  const { fetchPredictProcedure } = useProcedure();
   
-  const handleButtonClick = async () => {
-    const formData = new FormData(document.getElementById('feature-input-form') as HTMLFormElement);
+  const handleButtonClick = () => {
+    const form = document.getElementById('feature-input-form') as HTMLFormElement;
+    const formDataObj = new FormData(form);
 
     const data = {
-      材质: formData.get('material'),
-      厚度: formData.get('thickness'),
-      坡口角度: formData.get('bevelAngle'),
-      钝边: formData.get('bluntEdge'),
-      间隙: formData.get('gap'),
-      直径: formData.get('diameter'),
-      增透剂: formData.get('penetrant'),
+      材质: formDataObj.get('material'),
+      厚度: formDataObj.get('thickness'),
+      坡口角度: formDataObj.get('bevelAngle'),
+      钝边: formDataObj.get('bluntEdge'),
+      间隙: formDataObj.get('gap'),
+      直径: formDataObj.get('diameter'),
+      增透剂: formDataObj.get('penetrant'),
     };
-    console.log(JSON.stringify(data, null, 2));
     
-    // 调用API
-    setIsLoading(true);
-    try {
-      // 模拟API调用
-      const response = await new Promise<{data: WeldingProcedureInterface}>((resolve) => {
-        setTimeout(() => {
-          resolve({
-            data: {
-              焊接角度: 35 + Math.random() * 5,
-              峰值电流: 180 + Math.random() * 20
-            }
-          });
-        }, 1000);
-      });
-      
-      setWeldingData(response.data);
-    } catch (error) {
-      console.error("获取焊接参数失败", error);
-    } finally {
-      setIsLoading(false);
-    }
+    console.log(JSON.stringify(data, null, 2));
+    setFormData(data);
+    fetchPredictProcedure(data);
   };
 
   return (
     <div className="page-container">
-      {/* Feature param input area */}
-      <div>
+      {/* 左侧参数生成表单 */}
+      <div className=" px-2">
         <form id="feature-input-form">
+          <h2 className="form-title">焊接参数生成</h2>
           <div>
             <div className="input-container">
               <label className="input-label">材质</label>
@@ -64,27 +47,27 @@ export default function Home() {
           <div className="row-container">
             <div className="input-container">
               <label className="input-label">厚度</label>
-              <input type='number' step={0.1} defaultValue={0.0} name="thickness" className="text-input" />
+              <input type='number' step={0.1} defaultValue={0.0} name="thickness" className="text-input" placeholder="0.0" />
             </div>
             <div className="input-container">
               <label className="input-label">坡口角度</label>
-              <input type='number' step={0.1} defaultValue={0.0} name="bevelAngle" className="text-input" />
+              <input type='number' step={0.1} defaultValue={0.0} name="bevelAngle" className="text-input" placeholder="0.0" />
             </div>
           </div>
           <div className="row-container">
             <div className="input-container">
               <label className="input-label">钝边</label>
-              <input type='number' step={0.1} defaultValue={0.0} name="bluntEdge" className="text-input" />
+              <input type='number' step={0.1} defaultValue={0.0} name="bluntEdge" className="text-input" placeholder="0.0" />
             </div>
             <div className="input-container">
               <label className="input-label">间隙</label>
-              <input type='number' step={0.1} defaultValue={0.0} name="gap" className="text-input" />
+              <input type='number' step={0.1} defaultValue={0.0} name="gap" className="text-input" placeholder="0.0" />
             </div>
           </div>
           <div className="row-container">
             <div className="input-container">
               <label className="input-label">直径</label>
-              <input type='number' step={0.1} defaultValue={0.0} name="diameter" className="text-input" />
+              <input type='number' step={0.1} defaultValue={0.0} name="diameter" className="text-input" placeholder="0.0" />
             </div>
             <div className="input-container">
               <label className="input-label">增透剂</label>
@@ -102,10 +85,12 @@ export default function Home() {
             生成焊接参数
           </button>
         </form>
+        <ProcedureDisplay />
       </div>
 
-      <div className="ml-5">
-        <ProcedureDisplay data={weldingData} isLoading={isLoading} />
+      {/* 右侧参数上传表单 */}
+      <div className=" px-2">
+        <ProcedureUploader />
       </div>
     </div>
   )

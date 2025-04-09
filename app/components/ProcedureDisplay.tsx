@@ -1,12 +1,10 @@
 import './ProcedureDisplay.css';
-import { WeldingProcedureInterface } from '@utils/types';
+import { useProcedure } from '@/app/store';
 
-interface ProcedureDisplayProps {
-  data: WeldingProcedureInterface | null,
-  isLoading: boolean;
-}
 
-export default function ProcedureDisplay({ data, isLoading }: ProcedureDisplayProps) {
+export default function ProcedureDisplay() {
+  const { isLoading, predictProcedure } = useProcedure();
+  
   if (isLoading) {
     return (
       <div className="procedure-display loading">
@@ -16,7 +14,7 @@ export default function ProcedureDisplay({ data, isLoading }: ProcedureDisplayPr
     );
   }
 
-  if (!data) {
+  if (!predictProcedure) {
     return (
       <div className="procedure-display empty">
         <p>请填写参数并点击生成按钮</p>
@@ -30,11 +28,11 @@ export default function ProcedureDisplay({ data, isLoading }: ProcedureDisplayPr
       <div className="parameter-container">
         <div className="parameter">
           <span className="parameter-label">焊接角度:</span>
-          <span className="parameter-value">{data.焊接角度.toFixed(1)}°</span>
+          <span className="parameter-value">{predictProcedure.焊接角度.toFixed(1)}°</span>
         </div>
         <div className="parameter">
           <span className="parameter-label">峰值电流:</span>
-          <span className="parameter-value">{data.峰值电流.toFixed(1)}A</span>
+          <span className="parameter-value">{predictProcedure.峰值电流.toFixed(1)}A</span>
         </div>
       </div>
     </div>
