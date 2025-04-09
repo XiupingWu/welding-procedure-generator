@@ -2,9 +2,10 @@
 .page-container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   min-height: 100vh;
   overflow: scroll;
+  padding-top: 5%;
   margin-left: 5%;
   margin-right: 5%;
 }
