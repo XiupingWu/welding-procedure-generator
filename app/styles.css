@@ -3,7 +3,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  overflow: scroll;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 /* 表单样式 */
