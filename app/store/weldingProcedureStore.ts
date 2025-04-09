@@ -29,6 +29,7 @@ interface useProcedureStoreInterface {
   // uploadProcedure: null,
 
   fetchPredictProcedure: (formData: featureFormData) => Promise<void>,
+  uploadProcedure: (formData) => void,
   resetProcedure: () => void
 }
 
@@ -59,7 +60,10 @@ const useProcedure = create<useProcedureStoreInterface>((set) => ({
       set({ isLoading: false })
     } 
   },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  uploadProcedure: async (formData) => {
 
+  },
   resetProcedure: () => set({ predictProcedure: null })
 }));
 
