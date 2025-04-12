@@ -43,12 +43,12 @@ const useProcedure = create<useProcedureStoreInterface>((set) => ({
     
     try {
       // 调用Flask API
-      const response = await fetch('http://localhost:5328/api/predict', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/predict`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
       
       if (!response.ok) {

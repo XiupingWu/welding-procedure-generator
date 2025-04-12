@@ -10,26 +10,23 @@ CORS(app)
 
 @app.route('/api/predict', methods=['POST'])
 def predict_procedure():
-    print(request);
-    data = json.load(request.json);
+    
+    data = request.json
     generator = WeldingProcedureGenerator('./model/model_package.pkl');
-
-    result = json.dumps(generator.generate(data), indent=2, ensure_ascii=False);
+    result = generator.generate(data);
     # 这里处理焊接参数计算逻辑
     # 示例响应
-    return jsonify(result)
+    return result
 
 @app.route('/api/upload', methods=['POST'])
 def upload_procedure():
     data = request.json
     # 处理上传的焊接参数
     # 这里可以添加数据验证和存储逻辑
-    
     return jsonify({"status": "success", "message": "参数上传成功"})
 
 class WeldingProcedureGenerator:
     def __init__(self, model_path):
-        
         package = joblib.load(model_path)
         self.models = package['models']
         self.material_encoder = package['material_encoder']
@@ -67,6 +64,12 @@ class WeldingProcedureGenerator:
     
     def generate(self, inputs):
         # 特征构建
+        inputs['厚度'] = float(inputs['厚度'])
+        inputs['坡口角度'] = float(inputs['坡口角度'])
+        inputs['钝边'] = float(inputs['钝边'])
+        inputs['间隙'] = float(inputs['间隙'])
+        inputs['直径'] = float(inputs['直径'])
+        
         all_features = self._build_features(inputs)
             
         # 针对每个参数使用特定的特征子集进行预测
