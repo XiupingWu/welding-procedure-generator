@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { env } from 'next-runtime-env';
 
 type featureFormData = {
   材质: FormDataEntryValue | null;
@@ -44,7 +43,7 @@ const useProcedure = create<useProcedureStoreInterface>((set) => ({
     
     try {
       // 调用Flask API
-      const response = await fetch(`${env('NEXT_PUBLIC_FOO')}/api/predict`, {
+      const response = await fetch(`/api/predict`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +67,7 @@ const useProcedure = create<useProcedureStoreInterface>((set) => ({
   uploadProcedure: async (formData) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${env('NEXT_PUBLIC_FOO')}/api/upload`, {
+      const response = await fetch(`/api/upload`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
