@@ -25,7 +25,6 @@ export default function Home() {
       增透剂: formDataObj.get('penetrant'),
     };
     
-    console.log(JSON.stringify(data, null, 2));
     setFormData(data);
     fetchPredictProcedure(data);
   };

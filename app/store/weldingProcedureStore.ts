@@ -40,20 +40,23 @@ const useProcedure = create<useProcedureStoreInterface>((set) => ({
 
   fetchPredictProcedure: async (formData) => {
     set({ isLoading: true });
-    console.log(formData);
+    
     try {
-      // 模拟API调用
-      const response = await new Promise<{data}>((resolve) => {
-        setTimeout(() => {
-          resolve({
-            data: {
-              焊接角度: 35 + Math.random() * 5,
-              峰值电流: 180 + Math.random() * 20
-            }
-          });
-        }, 1000);
+      // 调用Flask API
+      const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/predict`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
       });
-      set({ predictProcedure: response.data, isLoading: false });
+      
+      if (!response.ok) {
+        throw new Error('API请求失败');
+      }
+      
+      const data = await response.json();
+      set({ predictProcedure: data, isLoading: false });
     } 
     catch (error) {
       console.log(error);
@@ -62,7 +65,26 @@ const useProcedure = create<useProcedureStoreInterface>((set) => ({
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   uploadProcedure: async (formData) => {
-
+    set({ isLoading: true });
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('上传API请求失败');
+      }
+      
+      await response.json();
+      set({ isLoading: false });
+    } catch (error) {
+      console.log(error);
+      set({ isLoading: false });
+    }
   },
   resetProcedure: () => set({ predictProcedure: null })
 }));
