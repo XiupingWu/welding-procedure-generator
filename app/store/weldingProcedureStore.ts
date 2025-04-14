@@ -40,7 +40,7 @@ const useProcedure = create<useProcedureStoreInterface>((set) => ({
 
   fetchPredictProcedure: async (formData) => {
     set({ isLoading: true });
-    
+    console.log(process.env.NEXT_PUBLIC_VERCEL_URL);
     try {
       // 调用Flask API
       const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/predict`, {
