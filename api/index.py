@@ -1,10 +1,10 @@
-from api.procedureGenerator import WeldingProcedureGenerator
+from procedureGenerator import WeldingProcedureGenerator
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 @app.route('/api/predict', methods=['POST'])
 def predict_procedure():
@@ -25,4 +25,4 @@ def upload_procedure():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=5328)

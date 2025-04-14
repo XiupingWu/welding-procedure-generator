@@ -1,12 +1,13 @@
 from collections import OrderedDict
-import joblib
+import pickle
 import numpy as np;
 import os
 
-model_path = os.path.join(os.getcwd(), 'api', 'model', 'model_package.pkl');
+model_path = os.path.join(os.getcwd(), 'model', 'model_package.pkl');
 class WeldingProcedureGenerator:
     def __init__(self, model_path = model_path):
-        package = joblib.load(model_path)
+        with open(model_path, 'rb') as f:
+            package = pickle.load(f)
         self.models = package['models']
         self.material_encoder = package['material_encoder']
         self.feature_names = package['feature_names']
@@ -119,3 +120,6 @@ class WeldingProcedureGenerator:
                 '模型类型': self.model_type
             }
         return model_info
+
+# 导出 WeldingProcedureGenerator 类
+__all__ = ['WeldingProcedureGenerator']
