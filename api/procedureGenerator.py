@@ -1,28 +1,6 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 from collections import OrderedDict
 import joblib
 import numpy as np;
-
-app = Flask(__name__)
-CORS(app)
-
-@app.route('/api/predict', methods=['POST'])
-def predict_procedure():
-    
-    data = request.json
-    generator = WeldingProcedureGenerator('./model/model_package.pkl');
-    result = generator.generate(data);
-    # 这里处理焊接参数计算逻辑
-    # 示例响应
-    return result
-
-@app.route('/api/upload', methods=['POST'])
-def upload_procedure():
-    data = request.json
-    # 处理上传的焊接参数
-    # 这里可以添加数据验证和存储逻辑
-    return jsonify({"status": "success", "message": "参数上传成功"})
 
 class WeldingProcedureGenerator:
     def __init__(self, model_path):
@@ -139,7 +117,3 @@ class WeldingProcedureGenerator:
                 '模型类型': self.model_type
             }
         return model_info
-
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5328)
