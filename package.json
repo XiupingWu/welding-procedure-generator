@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "flask": "cd flask-api && . venv/bin/activate && pip install -r ../requirements.txt && FLASK_APP=index.py FLASK_DEBUG=1 python3 -m flask run --port=5328",
+    "flask": "cd api && . venv/bin/activate && pip install -r ../requirements.txt && FLASK_APP=index.py FLASK_DEBUG=1 python3 -m flask run --port=5328",
     "dev:all": "concurrently --names \"前端,后端\" --prefix-colors \"blue,green\" \"npm run dev\" \"npm run flask\""
   },
   "dependencies": {
