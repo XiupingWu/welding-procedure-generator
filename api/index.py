@@ -10,7 +10,7 @@ CORS(app)
 def predict_procedure():
     
     data = request.json
-    generator = WeldingProcedureGenerator('/model/model_package.pkl');
+    generator = WeldingProcedureGenerator();
     result = generator.generate(data);
     # 这里处理焊接参数计算逻辑
     # 示例响应
