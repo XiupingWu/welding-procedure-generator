@@ -3,7 +3,7 @@ import joblib
 import numpy as np;
 import os
 
-model_path = os.path.join(os.getcwd(), 'model', 'model_package.pkl');
+model_path = os.path.join(os.getcwd(), 'api', 'model', 'model_package.pkl');
 class WeldingProcedureGenerator:
     def __init__(self, model_path = model_path):
         package = joblib.load(model_path)
