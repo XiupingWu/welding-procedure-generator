@@ -7,7 +7,7 @@ import numpy as np;
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/api/predict', methods=['POST'])
+@app.route('/api/predict', methods=['GET'])
 def predict_procedure():
     
     data = request.json
