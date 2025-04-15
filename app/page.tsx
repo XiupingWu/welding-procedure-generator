@@ -25,6 +25,9 @@ export default function Home() {
       增透剂: formDataObj.get('penetrant'),
     };
     
+    if(isNaN(Number(data.厚度)) || isNaN(Number(data.直径)) || Number(data.厚度) == 0 || Number(data.直径) == 0)
+      return alert('厚度或直径不可为空！');
+
     setFormData(data);
     fetchPredictProcedure(data);
   };
