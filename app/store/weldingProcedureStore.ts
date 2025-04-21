@@ -33,8 +33,6 @@ interface useProcedureStoreInterface {
   resetProcedure: () => void
 }
 
-const url = process.env.NODE_ENV === 'development'? process.env.NEXT_PUBLIC_VERCEL_URL : '';
-
 const useProcedure = create<useProcedureStoreInterface>((set) => ({
   isLoading: false,
   predictProcedure: null,
@@ -42,10 +40,10 @@ const useProcedure = create<useProcedureStoreInterface>((set) => ({
 
   fetchPredictProcedure: async (formData) => {
     set({ isLoading: true });
-    console.log(process.env.NEXT_PUBLIC_VERCEL_URL);
+    
     try {
       // 调用Flask API
-      const response = await fetch(`${url}/api/predict`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL }/api/predict`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,7 +63,7 @@ const useProcedure = create<useProcedureStoreInterface>((set) => ({
       set({ isLoading: false })
     } 
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   uploadProcedure: async (formData) => {
     set({ isLoading: true });
     try {
